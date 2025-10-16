@@ -8,4 +8,3 @@ export const sender = {
     email : ENV.EMAIL_FROM,
 };
 
-
