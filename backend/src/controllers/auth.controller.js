@@ -102,7 +102,7 @@ export const logout = (_,res) => {
     res.status(200).json({message : "Logged out Successfully"});
 }
 
-export const updateProfile = async (res,req) => {
+export const updateProfile = async (req,res) => {
     try {
         const { profilePic } = req.body;
         if(!profilePic) return res.status(400).json({message : "Profile pic is required"});
@@ -115,9 +115,17 @@ export const updateProfile = async (res,req) => {
             userId, 
             {profilePic : uploadResponse.secure_url}, 
             {new : true}
-        );
+        ).select("-password");
 
-        res.status(200).json(updatedUser);
+        if(!updatedUser) return res.status(404).json({message : "User not found "});
+
+        res.status(200).json({
+            _id: updatedUser._id,
+            fullName : updatedUser.fullName,
+            email : updatedUser.email,
+            profilePic : updatedUser.profilePic,
+        })
+
     } catch (error) {
         console.log("Error in update profile", error);
         res.status(500).json({message : "Internal server error"});
