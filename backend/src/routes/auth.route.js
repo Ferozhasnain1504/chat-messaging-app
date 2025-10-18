@@ -1,14 +1,18 @@
 import express from "express";
 import { signup,login,logout,updateProfile } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
+import { arcjetProtection } from "../middleware/arcjet.middleware.js";
 
 const router = express.Router();
 
+// runs first for rate limiting 
+router.use(arcjetProtection);
+
 router.post("/signup", signup);
 
-router.post("/login", login);
+router.post("/login",login);
 
-router.post("/logout",logout);
+router.post("/logout", logout);
 
 // protectRoute authenticates the user only then updateProfile is called 
 router.put("/update-profile", protectRoute, updateProfile);
