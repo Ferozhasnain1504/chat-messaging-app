@@ -5,7 +5,7 @@ import { arcjetProtection } from "../middleware/arcjet.middleware.js";
 
 const router = express.Router();
 
-// runs first for rate limiting 
+// runs first for rate limiting in all endpoints /signup, /login, /logout etc
 router.use(arcjetProtection);
 
 router.post("/signup", signup);
