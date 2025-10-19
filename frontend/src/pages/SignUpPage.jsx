@@ -84,7 +84,7 @@ function SignUpPage() {
                       </div>
                       {/* {submit button} */}
 
-                      <button className='auth-btn'
+                      <button className='auth-btn flex items-center justify-center'
                       type="submit"
                       disabled = {isSigningUp}>
                         {isSigningUp ? (
