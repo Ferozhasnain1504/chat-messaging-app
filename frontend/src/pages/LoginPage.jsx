@@ -8,7 +8,7 @@ import { LoaderIcon } from 'react-hot-toast';
 
 
 function LoginPage() {
-  const [formData, setFormData] = useState({fullName : "", email: "", password : ""});
+  const [formData, setFormData] = useState({ email: "", password : ""});
   
   const {login , isLoggingIn } = useAuthStore();
   
