@@ -7,25 +7,25 @@ export const useChatStore = create((set,get) => ({ // returns an object
     chats : [],
     messages : [],
     activeTab : "chats", // initially the chats tab should be selected i.e on refreshing the page 
-    seletedUser : null,
+    selectedUser : null,
     isUsersLoading : false,
     isMessagesLoading : false,
-    isSoundEnabled : localStorage.getItem("isSoundEnabled") === true, // refreshing the page doesn't turn on or off the sound
+    isSoundEnabled : JSON.parse(localStorage.getItem("isSoundEnabled")) === true, // refreshing the page doesn't turn on or off the sound
     toggleSound : () => {
         localStorage.setItem("isSoundEnabled", !get().isSoundEnabled ) // update localStorage
         set({isSoundEnabled : !get().isSoundEnabled }) // update state
     },
 
     setActiveTab : (tab) => set({activeTab : tab}),
-    setSeletedUser : (seletedUser) => set({seletedUser}),
+    setSelectedUser : (selectedUser) => set({selectedUser}),
 
     getAllContacts : async() => {
         set({isUsersLoading : true});
         try {
-            const res = axiosInstance.get("/messages/contacts");
+            const res = await axiosInstance.get("/messages/contacts");
             set({allContacts : res.data});
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message || 'Something went wrong!');
         }finally{
             set({isUsersLoading : false});
         }
@@ -34,10 +34,10 @@ export const useChatStore = create((set,get) => ({ // returns an object
     getMyChatPartners : async() => {
         set({isUsersLoading : true});
         try {
-            const res = axiosInstance.get("/messages/chats");
+            const res = await axiosInstance.get("/messages/chats");
             set({chats : res.data});
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message || 'Something went wrong!');
         }finally{
             set({isUsersLoading : false});
         }
