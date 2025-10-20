@@ -42,7 +42,7 @@ const ProfileHeader = () => {
                 {isUpdatingProfileImg ? (
                   <Loader2 className='w-full h-5 animate-spin text-center' />
                 ):(
-                   <img src={selectedImg || authUser.profilePic || 'avatar.png'} alt="User profile pic" 
+                   <img src={selectedImg || authUser.profilePic || '/avatar.png'} alt="User profile pic" 
                      className='size-full obejct-cover'
                    />
                 )}
