@@ -1,8 +1,10 @@
-import React from 'react'
+import { useEffect } from 'react';
 import { useChatStore } from '../store/useChatStore';
 import { useAuthStore } from '../store/useAuthStore.js';
 import ChatHeader from './ChatHeader.jsx';
-import { useEffect } from 'react';
+import NoChatHistoryPlaceholder from './NoChatHistoryPlaceholder.jsx';
+import MessageContainer from './MessageContainer.jsx';
+import MessageInput from './MessageInput.jsx';
 
 const ChatContainer = () => {
 
@@ -18,6 +20,8 @@ const ChatContainer = () => {
   return (
     <>
      <ChatHeader />
+     <MessageContainer/>
+     <MessageInput/>
     </>
   )
 }
