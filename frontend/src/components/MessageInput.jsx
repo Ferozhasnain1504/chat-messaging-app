@@ -23,7 +23,7 @@ const MessageInput = () => {
         image: imagePreview,
       });
       setText("");
-      setImagePreview("");
+      setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     };
 

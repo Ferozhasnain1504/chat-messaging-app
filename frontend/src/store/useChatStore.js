@@ -76,7 +76,7 @@ export const useChatStore = create((set,get) => ({ // returns an object
       set({messages : [...messages, optimisticMessage]});
       try {
         const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
-        set({ messages: messages.concat(res.data) });
+        set({messages: get().messages.map(msg => msg._id === tempId ? res.data : msg) });
       } catch (error) {
         // remove optimistic message on failure 
         set({messages : messages});
