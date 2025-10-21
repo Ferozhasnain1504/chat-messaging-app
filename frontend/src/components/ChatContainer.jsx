@@ -8,8 +8,7 @@ import MessageInput from './MessageInput.jsx';
 
 const ChatContainer = () => {
 
-  const {selectedUser, isMessagesLoading, getMessageByUserId, messages } = useChatStore();
-  const {authUser} = useAuthStore();
+  const {selectedUser, getMessageByUserId } = useChatStore();
 
   useEffect(() => {
     if (selectedUser?._id) {

@@ -16,7 +16,7 @@ const  __dirname = path.resolve();
 
 // middleware
 
-app.use(express.json());
+app.use(express.json({limit : '5mb'})); // set payload or max upload size
 app.use(cors({origin : ENV.CLIENT_URL, credentials : true}));
 app.use(cookieParser());
 
