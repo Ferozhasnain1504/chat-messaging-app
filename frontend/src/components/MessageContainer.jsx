@@ -1,5 +1,6 @@
 import { useChatStore } from '../store/useChatStore';
 import { useAuthStore } from '../store/useAuthStore.js';
+import { useEffect, useRef } from 'react';
 import NoChatHistoryPlaceholder from './NoChatHistoryPlaceholder.jsx';
 import MessagesLoadingSkeleton from './MessagesLoadingSkeleton.jsx';
 
@@ -7,6 +8,13 @@ const MessageContainer = () => {
   const {selectedUser, messages,isMessagesLoading } = useChatStore();
   const {authUser} = useAuthStore();
 
+  const messageEndRef = useRef(null);
+
+  useEffect(() => {
+    if(messageEndRef.current){
+      messageEndRef.current.scrollIntoView({behavior : "smooth"});
+    }
+  }, [messages])
   return (
     <div className='flex-1 px-6 overflow-y-auto py-8'>
         {messages.length > 0 && !isMessagesLoading ? (
@@ -29,6 +37,9 @@ const MessageContainer = () => {
                 </div>
               </div>
             ))}
+
+            <div ref ={messageEndRef}/>
+
           </div>
         ) : isMessagesLoading ? <MessagesLoadingSkeleton/> :(
           <NoChatHistoryPlaceholder name = {selectedUser.fullName}/>
