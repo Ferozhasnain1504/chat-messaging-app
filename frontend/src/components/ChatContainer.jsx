@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useChatStore } from '../store/useChatStore';
-import { useAuthStore } from '../store/useAuthStore.js';
 import ChatHeader from './ChatHeader.jsx';
 import NoChatHistoryPlaceholder from './NoChatHistoryPlaceholder.jsx';
 import MessageContainer from './MessageContainer.jsx';
@@ -8,7 +7,7 @@ import MessageInput from './MessageInput.jsx';
 
 const ChatContainer = () => {
 
-  const {selectedUser, getMessageByUserId } = useChatStore();
+  const {selectedUser, getMessageByUserId} = useChatStore();
 
   useEffect(() => {
     if (selectedUser?._id) {
