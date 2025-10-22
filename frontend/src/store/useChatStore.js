@@ -14,11 +14,11 @@ export const useChatStore = create((set, get) => ({
   isMessagesLoading: false,
   isSoundEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) || false, // refreshing the page doesn't turn on or off the sound
   toggleSound: () => {
-
-    localStorage.setItem("isSoundEnabled", !get().isSoundEnabled); // update localStorage
+    const newValue = !get().isSoundEnabled;
+    localStorage.setItem("isSoundEnabled", JSON.stringify(newValue)); // update localStorage
     set({ isSoundEnabled: !get().isSoundEnabled }); // update state
   },
-  
+
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 
@@ -101,6 +101,9 @@ export const useChatStore = create((set, get) => ({
     // grab socket state from useAuthStore
     const socket = useAuthStore.getState().socket;
 
+    // clean previous listeners to avoid duplicates
+    socket.off("newMessage");
+
     // listen to events that are newMessage and sent by server
     socket.on("newMessage", (newMessage) => {
       // get current messages
@@ -110,9 +113,7 @@ export const useChatStore = create((set, get) => ({
       if (isSoundEnabled) {
         const notificationSound = new Audio("/sounds/notification.mp3");
         notificationSound.currentTime = 0;
-        notificationSound
-          .play()
-          .catch((e) => console.log("Audio play failed", e));
+        notificationSound.play().catch((e) => console.log("Audio play failed", e));
       }
     });
   },
