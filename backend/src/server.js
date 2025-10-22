@@ -7,11 +7,11 @@ import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import { connectDB } from "./lib/db.js";
 import {ENV} from './lib/env.js';
+import {app, server} from './lib/socket.js';
 
 
 const PORT = ENV.PORT || 3000;
 
-const app = express();
 const  __dirname = path.resolve();
 
 // middleware
@@ -32,8 +32,7 @@ if(ENV.NODE_ENV === "production"){
         res.sendFile(path.join(__dirname,"../frontend/dist/index.html"));
     })
 }
-
-app.listen(PORT, (req,res) => {
+server.listen(PORT, (req,res) => {
     console.log(`Server is running at port ${PORT}`);
     connectDB();
 })
