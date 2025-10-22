@@ -1,18 +1,24 @@
 import {create} from "zustand";
 import {axiosInstance} from '../lib/axios.js';
 import toast from "react-hot-toast";
+import { io } from "socket.io-client";
 
-export const useAuthStore = create((set) => ({
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000" : "/"
+
+export const useAuthStore = create((set,get) => ({
     authUser : null,
     isCheckingAuth : true,
     isSigningUp : false,
     isLoggingIn : false,
     isUpdatingProfileImg: false,
+    socket : null,
+    onlineUsers : [],
     
-    checkAuth : async () => {
+    checkAuth : async () => { // for page refresh
         try {
             const res = await axiosInstance.get("/auth/check");
             set({authUser : res.data});
+            get().connectSocket();
         } catch (error) {
             console.log("Error in authCheck: ", error);
             set({authUser : null})
@@ -29,6 +35,8 @@ export const useAuthStore = create((set) => ({
 
             // toast 
             toast.success("Logged In successfully")
+
+            get().connectSocket();
         } catch (error) {
             toast.error(error.response.data.message);
         }finally{
@@ -44,6 +52,7 @@ export const useAuthStore = create((set) => ({
 
             // toast 
             toast.success("Account Created successfully!")
+            get().connectSocket();
         } catch (error) {
             toast.error(error.response.data.message);
         }finally{
@@ -56,6 +65,7 @@ export const useAuthStore = create((set) => ({
             await axiosInstance.post("/auth/logout");
             set({authUser : null})
             toast.success("Logged out successfully")
+            get().disconnectSocket();
         } catch (error) {
             toast.error("Error logging out"); 
             console.log("Logout error: ", error);
@@ -74,5 +84,31 @@ export const useAuthStore = create((set) => ({
         }finally{
             set({isUpdatingProfileImg : false})
         }
+    },
+
+    connectSocket : () => {
+        // check if user is authenticated or not
+        const {authUser} = get();
+        if(!authUser || get().socket?.connected ) return
+
+        // if authenticated establish socket server 
+        const socket = io(BASE_URL, {
+            withCredentials : true, // this sends cookies are sent with the connections 
+        });
+
+        // connect a socket server
+        socket.connect();
+        
+        //update the state of socket
+        set({socket})
+
+        // listen for online users
+        socket.on("getOnlineUsers", (userIds) => {
+            set({onlineUsers : userIds});
+        })
+    },
+
+    disconnectSocket : () => {
+        if(get().socket?.connected) get().socket?.disconnect();
     }
 }))
