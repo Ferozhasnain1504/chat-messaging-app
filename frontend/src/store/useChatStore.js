@@ -106,6 +106,9 @@ export const useChatStore = create((set, get) => ({
 
     // listen to events that are newMessage and sent by server
     socket.on("newMessage", (newMessage) => {
+      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+      if(!isMessageSentFromSelectedUser) return;
+
       // get current messages
       const currentMessages = get().messages;
       set({ messages: [...currentMessages, newMessage] });
